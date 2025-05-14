@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  # Servicio de RabbitMQ
+  rabbitmq:
+    image: "rabbitmq:management"
+    container_name: "rabbitmq"
+    ports:
+      - "5672:5672"      # Puerto para RabbitMQ
+      - "15672:15672"    # Puerto para la interfaz de administración
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+
+  # Servicio de la API Flask
+  flask-api:
+    build: .
+    container_name: "flask-api"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    command: python api/app.py
+
+  # Worker para procesar las citas
+  booking-processor:
+    build: .
+    container_name: "booking-processor"
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    command: python workers/booking_processor.py
+
+  # Worker para confirmar citas
+  confirmers:
+    build: .
+    container_name: "confirmers"
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    command: python workers/confirmer.py
+
+  # Worker para notificar citas
+  notifiers:
+    build: .
+    container_name: "notifiers"
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    command: python workers/notifier.py
+
+  # Worker para rechazar citas
+  rejectors:
+    build: .
+    container_name: "rejectors"
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    command: python workers/rejector.py
+
+networks:
+  app-network:
+    driver: bridge

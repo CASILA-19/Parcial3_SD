@@ -1,5 +1,11 @@
-Clínica Online – Gestión de Citas Médicas
+
 (Realmente ni la alcance a probar completamente, la arquitectura esta bien pero tuve un monton de errores con docker que que me quitaron demasiado tiempo y ps paaaila, quiza tambien baste mucho tiempo eligiendo y justificando la arquitectura a utilizarr y bueno... :/tampoco alcance a hacer la otra parte de la simulacion de rabbitMQ)
+
+
+
+
+
+Clínica Online – Gestión de Citas Médicas
 Este proyecto implementa una solución distribuida para la gestión de reservas de citas médicas en una clínica en línea. Utiliza Flask para la API REST, RabbitMQ para procesamiento asíncrono con colas de trabajo y publicación/suscripción, y Docker Compose para la orquestación de servicios.
 Funcionalidades
 
